@@ -4,6 +4,8 @@ var io = require('socket.io')(http);
 var ss = require('socket.io-stream');
 var ytdl = require('ytdl-core');
 
+io.set('origins', 'https://salty-falls-17641.herokuapp.com');
+
 io.on('connection', function(socket){
   ss(socket).on('download', function (stream, data) {
     const url = `https://www.youtube.com/watch?v=${data.ytid}`;
