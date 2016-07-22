@@ -4,11 +4,6 @@ var io = require('socket.io')(http, {'transports': ['websocket', 'polling']});
 var ss = require('socket.io-stream');
 var ytdl = require('ytdl-core');
 
-io.configure(function () {
-  io.set("transports", ["xhr-polling"]);
-  io.set("polling duration", 10);
-});
-
 io.set('origins', 'https://salty-falls-17641.herokuapp.com');
 
 io.on('connection', function(socket){
