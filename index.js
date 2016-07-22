@@ -5,7 +5,6 @@ var ss = require('socket.io-stream');
 var ytdl = require('ytdl-core');
 
 io.set('origins', 'https://salty-falls-17641.herokuapp.com');
-io.set('origins', 'localhost:3000');
 
 io.on('connection', function(socket){
   ss(socket).on('download', function (stream, data) {
