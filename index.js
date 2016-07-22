@@ -1,6 +1,6 @@
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http, {'transports': ['websocket', 'polling']});
 var ss = require('socket.io-stream');
 var ytdl = require('ytdl-core');
 
