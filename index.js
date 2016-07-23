@@ -20,6 +20,7 @@ io.on('connection', function(socket){
     const ws = new WritableStream();
     ws._write = function (chunk, type, next) {
       console.log(`Sent Chunk#${chunkNum++} from URL:${url}`);
+      next();
     };
     downloadStream.pipe(ws);
   });
