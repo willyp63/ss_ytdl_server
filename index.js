@@ -11,15 +11,15 @@ io.on('connection', function(socket){
     const url = `https://www.youtube.com/watch?v=${data.ytid}`;
     const downloadStream = ytdl(url, {filter: "audioonly"});
     downloadStream.pipe(stream).on('finish', function () {
-      console.log(`Finished Downloading from URL:${url}`);
+      // console.log(`Finished Downloading from URL:${url}`);
     });
 
     // track download
-    console.log(`Begun Downloading from URL:${url}`);
+    // console.log(`Begun Downloading from URL:${url}`);
     let chunkNum = 0;
     const ws = new WritableStream();
     ws._write = function (chunk, type, next) {
-      console.log(`Sent Chunk#${chunkNum++} from URL:${url}`);
+      // console.log(`Sent Chunk#${chunkNum++} from URL:${url}`);
       next();
     };
     downloadStream.pipe(ws);
