@@ -3,7 +3,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http,
-  {origins:'https://salty-falls-17641.herokuapp.com:* localhost:3000:*'});
+  {origins:'http://www.soundsscape.com:* https://salty-falls-17641.herokuapp.com:* localhost:3000:*'});
 var ss = require('socket.io-stream');
 var ytdl = require('ytdl-core');
 var WritableStream = require('stream').Writable;
