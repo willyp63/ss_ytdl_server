@@ -5,9 +5,11 @@ const port = process.env.PORT || 8080;
 http.createServer(function (req, res) {
   const ytid = matchUrl(req.url);
   if (ytid) {
+    console.log(`***Started Streaming Audio for ytid:${ytid}***`);
     audioStream(ytid).on('response', function (downloadRes) {
       res.writeHead(206, resHeader(req, downloadRes));
     }).on('end', function () {
+      console.log(`***Finished Streaming Audio for ytid:${ytid}***`);
       res.end();
     }).pipe(res);
   } else {
