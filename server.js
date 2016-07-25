@@ -5,6 +5,7 @@ var ytdl = require('ytdl-core');
 
 const port = process.env.PORT || 8080;
 http.createServer(function (req, res) {
+  console.log(req.url);
   const urlMatch = req.url.match(/^\/download\/(.*)$/);
   if (urlMatch) {
     const ytid = urlMatch[1];
