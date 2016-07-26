@@ -1,7 +1,9 @@
-var http = require('http');
-var ytdl = require('ytdl-core');
+'user strict';
 
-var _streamSizes = {};
+const http = require('http');
+const ytdl = require('ytdl-core');
+
+let _streamSizes = {};
 
 const port = process.env.PORT || 8080;
 
@@ -53,18 +55,18 @@ function audioStream (ytid, start, end) {
 }
 
 function initRequest (req) {
-  var range = req.headers.range;
-  var positions = range.replace(/bytes=/, "").split("-");
-  var start = parseInt(positions[0], 10);
+  const range = req.headers.range;
+  const positions = range.replace(/bytes=/, "").split("-");
+  const start = parseInt(positions[0], 10);
   return !start;
 }
 
 function requestRange (req, totalBytes) {
-  var range = req.headers.range;
-  var positions = range.replace(/bytes=/, "").split("-");
-  var start = parseInt(positions[0], 10);
-  var end = positions[1] ? parseInt(positions[1], 10) : totalBytes - 1;
-  var chunksize = (end - start) + 1;
+  const range = req.headers.range;
+  const positions = range.replace(/bytes=/, "").split("-");
+  const start = parseInt(positions[0], 10);
+  const end = positions[1] ? parseInt(positions[1], 10) : totalBytes - 1;
+  const chunksize = (end - start) + 1;
   return {start: start, end: end, chunksize: chunksize};
 }
 
