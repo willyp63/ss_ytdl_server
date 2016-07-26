@@ -8,7 +8,7 @@ let _streamSizes = {};
 const port = process.env.PORT || 8080;
 
 http.createServer(function (req, res) {
-  const ytid = matchUrl(req.url);
+  let ytid = matchDownloadUrl(req.url);
   if (ytid) {
     if (initRequest(req)) {
       // stream entire audio
@@ -22,6 +22,8 @@ http.createServer(function (req, res) {
         stream.pipe(res);
       }).on('end', function () {
         res.end();
+      }).on('info', function (info, format) {
+        console.log(format);
       });
     } else {
       // stream only requested range
@@ -35,16 +37,32 @@ http.createServer(function (req, res) {
       });
     }
   } else {
-    // not a valid url
-    res.writeHead(404);
-    res.end();
+    ytid = matchCheckUrl(req.url);
+    if (ytid) {
+      const url = `https://www.youtube.com/watch?v=${ytid}`;
+      ytdl(url, {filter: "audioonly"}).on('info', function (info, format) {
+        const validFormat = format.audioEncoding === 'opus';
+        res.writeHead(200, {"Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"});
+        res.end(JSON.stringify({validFormat: validFormat}));
+      });
+    } else {
+      // not a valid url
+      res.writeHead(404);
+      res.end();
+    }
   }
 }).listen(port, function () {
   console.log(`listening on *:${port}`);
 });
 
-function matchUrl (url) {
+function matchDownloadUrl (url) {
   const match = url.match(/^\/download\/(.*)$/);
+  return match ? match[1] : null;
+}
+
+function matchCheckUrl (url) {
+  const match = url.match(/^\/check\/(.*)$/);
   return match ? match[1] : null;
 }
 
