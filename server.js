@@ -1,7 +1,7 @@
 var http = require('http');
 var ytdl = require('ytdl-core');
 
-let _streamSizes = {};
+var _streamSizes = {};
 
 const port = process.env.PORT || 8080;
 
