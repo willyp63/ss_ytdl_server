@@ -3,10 +3,24 @@
   <head>
     <meta charset="utf-8">
     <title>Test</title>
+    <script type="text/javascript">
+      window.addEventListener('DOMContentLoaded', function () {
+        logSeekable();
+      });
+
+      function logSeekable () {
+        const audio = document.getElementById('audio');
+        if (audio.buffered.length) {
+          console.log(audio.buffered.start(0));
+          console.log(audio.buffered.end(0));
+        }
+        setTimeout(logSeekable, 500);
+      }
+    </script>
   </head>
   <body>
-    <audio controls>
-      <source src="http://thawing-bastion-97540.herokuapp.com/download/qRPpLGxGNZY" type="audio/mp3">
+    <audio id='audio' controls>
+      <source src="http://localhost:8080/download/qRPpLGxGNZY" type="audio/mp3">
     </audio>
   </body>
 </html>
