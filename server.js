@@ -17,15 +17,11 @@ app.get('/stream/:ytid', function (req, res) {
 });
 
 app.get('/audioEncoding/:ytid', function (req, res) {
-  if (!allowedOrigins.includes(req.headers.origin)) {
-    res.status(403).send('Forbidden');
-  } else {
-    const url = `https://www.youtube.com/watch?v=${req.params.ytid}`;
-    const stream = ytdl(url, {filter: "audioonly"}).on('info', function (info, format) {
-      res.writeHead(200, {"Content-Type": "application/json", "Access-Control-Allow-Origin": req.headers.origin});
-      res.end(JSON.stringify({validFormat: (format.audioEncoding === 'opus')}));
-    });
-  }
+  const url = `https://www.youtube.com/watch?v=${req.params.ytid}`;
+  const stream = ytdl(url, {filter: "audioonly"}).on('info', function (info, format) {
+    res.writeHead(200, {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+    res.end(JSON.stringify({validFormat: (format.audioEncoding === 'opus')}));
+  });
 });
 
 function audioStream (ytid, start, end) {
@@ -45,6 +41,7 @@ function requestRange (req) {
 function responseHeader (reqRange, totalBytes) {
   const end = reqRange.end || totalBytes - 1;
   return {
+    "Access-Control-Allow-Origin": "*",
     "Content-Range": "bytes " + reqRange.start + "-" + (end) + "/" + totalBytes,
     "Accept-Ranges": "bytes",
     "Content-Length": (end - reqRange.start + 1),
