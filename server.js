@@ -3,6 +3,13 @@
 const app = require('express')();
 const ytdl = require('ytdl-core');
 
+// ORIGINS
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
+// STREAM
 app.get('/stream/:ytid', function (req, res) {
   // stream only requested range
   const reqRange = requestRange(req);
@@ -14,12 +21,19 @@ app.get('/stream/:ytid', function (req, res) {
   });
 });
 
+// AUDIO ENCODING
 app.get('/audioEncoding/:ytid', function (req, res) {
   const url = `https://www.youtube.com/watch?v=${req.params.ytid}`;
   const stream = ytdl(url, {filter: "audioonly"}).on('info', function (info, format) {
-    res.writeHead(200, {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"});
+    res.writeHead(200, {"Content-Type": "application/json"});
     res.end(JSON.stringify({validFormat: (format.audioEncoding === 'opus')}));
   });
+});
+
+// listen on heroku port or 8080
+const port = process.env.PORT || 8080;
+app.listen(port, function () {
+  console.log(`listening on *:${port}`);
 });
 
 function audioStream (ytid, start, end) {
@@ -39,16 +53,9 @@ function requestRange (req) {
 function responseHeader (reqRange, totalBytes) {
   const end = reqRange.end || totalBytes - 1;
   return {
-    "Access-Control-Allow-Origin": "*",
     "Content-Range": "bytes " + reqRange.start + "-" + (end) + "/" + totalBytes,
     "Accept-Ranges": "bytes",
     "Content-Length": (end - reqRange.start + 1),
     "Content-Type": "audio/mp3"
   };
 }
-
-// listen on heroku port or 8080
-const port = process.env.PORT || 8080;
-app.listen(port, function () {
-  console.log(`listening on *:${port}`);
-});
