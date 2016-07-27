@@ -11,12 +11,20 @@ app.use(function(req, res, next) {
   next();
 });
 
-
 // ACCESS CACHE
 app.get('/ytid/:spotifyId', function (req, res) {
   res.writeHead(200, {"Content-Type": "application/json"});
   if (_ytids[req.params.spotifyId]) {
-    res.end(JSON.stringify({ytid: _ytids[req.params.spotifyId]}));
+    const url = `https://www.youtube.com/watch?v=${_ytids[req.params.spotifyId]}`;
+    const stream = ytdl(url, {filter: "audioonly"}).on('info', function (info, format) {
+      stream.destroy();
+      res.end(JSON.stringify({ytid: _ytids[req.params.spotifyId]}));
+    }).on('error', function (err) {
+      // remove ytid from cache
+      _ytids[req.params.spotifyId] = null;
+      console.error(err.stack);
+      res.end(JSON.stringify({ytid: null}));
+    });
   } else {
     res.end(JSON.stringify({ytid: null}));
   }
