@@ -3,8 +3,6 @@
 const app = require('express')();
 const ytdl = require('ytdl-core');
 
-const allowedOrigins = ['http://localhost:3000', 'https://salty-falls-17641.herokuapp.com'];
-
 app.get('/stream/:ytid', function (req, res) {
   // stream only requested range
   const reqRange = requestRange(req);
