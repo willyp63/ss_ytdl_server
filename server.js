@@ -90,6 +90,7 @@ function requestRange (req, totalBytes) {
 
 function responseHeader (reqRange, totalBytes) {
   return {
+    "Access-Control-Allow-Origin": "*",
     "Content-Range": "bytes " + reqRange.start + "-" + (reqRange.end - 1) + "/" + totalBytes,
     "Accept-Ranges": "bytes",
     "Content-Length": reqRange.chunksize,
