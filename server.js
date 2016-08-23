@@ -57,6 +57,9 @@ app.get('/audioEncoding/:ytid', function (req, res) {
   const stream = ytdl(url, {filter: "audioonly"}).on('info', function (info, format) {
     stream.destroy();
     res.writeHead(200, {"Content-Type": "application/json"});
+    console.log('#########');
+    console.log(format.container);
+    console.log(format.audioEncoding);
     res.end(JSON.stringify({validFormat: (format.audioEncoding === 'opus')}));
   }).on('error', function (err) {
     console.error(err.stack);
