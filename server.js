@@ -78,6 +78,7 @@ function audioStream (ytid, start, end) {
 
 function requestRange (req) {
   const range = req.headers.range;
+  if (!range) { return {start: 0, end: null}; }
   const positions = range.replace(/bytes=/, "").split("-");
   const start = parseInt(positions[0], 10);
   const end = positions[1] ? parseInt(positions[1], 10) : null;
