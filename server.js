@@ -2,7 +2,6 @@
 
 const app = require('express')();
 const ytdl = require('ytdl-core');
-const ffmpeg = require('fluent-ffmpeg');
 
 let _ytids = {};
 
