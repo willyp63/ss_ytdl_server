@@ -95,6 +95,6 @@ function responseHeader (reqRange, totalBytes) {
     "Content-Range": "bytes " + reqRange.start + "-" + (end) + "/" + totalBytes,
     "Accept-Ranges": "bytes",
     "Content-Length": (end - reqRange.start + 1),
-    "Content-Type": "audio/mp3"
+    "Content-Type": "audio/ogg"
   };
 }
