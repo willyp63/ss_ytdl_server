@@ -46,7 +46,7 @@ app.get('/stream/:ytid', function (req, res) {
     const totalBytes = reqRange.start + parseInt(downloadRes.headers['content-length']);
     res.writeHead(206, responseHeader(reqRange, totalBytes));
     console.log('stream');
-    ffmpeg(stream).toFormat('mp3').pipe(res);
+    stream.pipe(res);
   }).on('error', function (err) {
     console.error(err.stack);
     res.status(500).send('Can not open Stream!');
