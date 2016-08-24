@@ -2,14 +2,13 @@
 
 const app = require('express')();
 const ytdl = require('ytdl-core');
+const ffmpeg = require('fluent-ffmpeg');
 
 let _ytids = {};
 
 // ORIGINS
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Range");
-  res.header("Access-Control-Expose-Headers", "Content-Range");
   next();
 });
 
@@ -46,7 +45,8 @@ app.get('/stream/:ytid', function (req, res) {
     // stream audio
     const totalBytes = reqRange.start + parseInt(downloadRes.headers['content-length']);
     res.writeHead(206, responseHeader(reqRange, totalBytes));
-    stream.pipe(res);
+    console.log('stream');
+    ffmpeg(stream).toFormat('mp3').pipe(res);
   }).on('error', function (err) {
     console.error(err.stack);
     res.status(500).send('Can not open Stream!');
