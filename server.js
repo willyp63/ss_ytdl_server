@@ -2,7 +2,6 @@
 
 const app = require('express')();
 const ytdl = require('ytdl-core');
-const ffmpeg = require('fluent-ffmpeg');
 
 let _ytids = {};
 
@@ -47,7 +46,7 @@ app.get('/stream/:ytid', function (req, res) {
     // stream audio
     const totalBytes = reqRange.start + parseInt(downloadRes.headers['content-length']);
     res.writeHead(206, responseHeader(reqRange, totalBytes));
-    ffmpeg(stream).pipe(res);
+    stream.pipe(res);
   }).on('error', function (err) {
     console.error(err.stack);
     res.status(500).send('Can not open Stream!');
