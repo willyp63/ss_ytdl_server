@@ -48,11 +48,8 @@ app.get('/cache', function (req, res) {
 
 // STREAM
 app.get('/stream', function (req, res) {
-  console.log('$$$$$$$$$$$$$$$$$$$$');
-  console.log(req.headers);
   const ytid = req.query.ytid;
   const encoding = req.query.encoding;
-  console.log(req.query.encoding);
   const reqRange = requestRange(req);
 
   // check if partial request goes to end of file
@@ -73,8 +70,6 @@ function streamAudio (res, ytid, reqRange, encoding, totalBytes) {
     totalBytes = (totalBytes || parseInt(downloadRes.headers['content-length']));
     res.writeHead(206, responseHeader(reqRange, encoding, totalBytes));
     // stream audio
-    console.log('%%%%%%%%%' + downloadRes.headers['content-type']);
-    console.log(responseHeader(reqRange, encoding, totalBytes));
     console.log(`Streaming Audio for YTID! (${ytid} (${reqRange.start} - ${reqRange.end}))`);
     stream.pipe(res);
   }).on('error', function (err) {
@@ -87,14 +82,11 @@ function streamAudio (res, ytid, reqRange, encoding, totalBytes) {
 app.get('/audioEncoding', function (req, res) {
   const url = `https://www.youtube.com/watch?v=${req.query.ytid}`;
   const filterFunction = (req.query.encoding === 'opus' ? opusFormat : aacFormat);
-  console.log(req.query.encoding);
   const stream = ytdl(url, {filter: filterFunction}).on('info', function (info, format) {
     stream.destroy();
-    console.log('good');
     res.writeHead(200, {"Content-Type": "application/json"});
     res.end(JSON.stringify({validFormat: true}));
   }).on('error', function (err) {
-    console.log('bad');
     res.writeHead(200, {"Content-Type": "application/json"});
     res.end(JSON.stringify({validFormat: false}));
   });
