@@ -52,7 +52,6 @@ app.get('/stream', function (req, res) {
   const encoding = req.query.encoding;
   const reqRange = requestRange(req);
 
-
   // check if partial request goes to end of file
   if (!reqRange.end) {
     console.log('EOF Request!');
@@ -61,8 +60,6 @@ app.get('/stream', function (req, res) {
     // must get totalBytes with seperate request
     console.log('NOT EOF Request!');
     getTotalBytes(ytid, encoding, function (totalBytes) {
-      console.log(reqRange);
-      console.log(totalBytes);
       streamAudio(res, ytid, reqRange, encoding, totalBytes);
     });
   }
@@ -71,6 +68,7 @@ app.get('/stream', function (req, res) {
 function streamAudio (res, ytid, reqRange, encoding, totalBytes) {
   const stream = audioStream(ytid, encoding, reqRange.start, reqRange.end).on('response', function (downloadRes) {
     totalBytes = (totalBytes || parseInt(downloadRes.headers['content-length']));
+    console.log('#######' + totalBytes);
     res.writeHead(206, responseHeader(reqRange, encoding, totalBytes));
     // stream audio
     console.log(`Streaming Audio for YTID! (${ytid} (${reqRange.start} - ${reqRange.end}))`);
