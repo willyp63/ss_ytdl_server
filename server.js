@@ -51,6 +51,7 @@ app.get('/stream', function (req, res) {
   const ytid = req.query.ytid;
   const encoding = req.query.encoding;
   const reqRange = requestRange(req);
+  console.log(reqRange);
 
   // check if partial request goes to end of file
   if (!reqRange.end) {
