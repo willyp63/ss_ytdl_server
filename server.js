@@ -51,7 +51,7 @@ app.get('/stream', function (req, res) {
   const ytid = req.query.ytid;
   const encoding = req.query.encoding;
   const reqRange = requestRange(req);
-  console.log(reqRange);
+
 
   // check if partial request goes to end of file
   if (!reqRange.end) {
@@ -61,6 +61,8 @@ app.get('/stream', function (req, res) {
     // must get totalBytes with seperate request
     console.log('NOT EOF Request!');
     getTotalBytes(ytid, encoding, function (totalBytes) {
+      console.log(reqRange);
+      console.log(totalBytes);
       streamAudio(res, ytid, reqRange, encoding, totalBytes);
     });
   }
