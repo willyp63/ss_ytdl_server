@@ -67,7 +67,7 @@ app.get('/stream', function (req, res) {
 
 function streamAudio (res, ytid, reqRange, encoding, totalBytes) {
   const stream = audioStream(ytid, encoding, reqRange.start, reqRange.end).on('response', function (downloadRes) {
-    totalBytes = (totalBytes || parseInt(downloadRes.headers['content-length']));
+    totalBytes = (totalBytes || parseInt(downloadRes.headers['content-length']) + reqRange.start);
     console.log(responseHeader(reqRange, encoding, totalBytes));
     res.writeHead(206, responseHeader(reqRange, encoding, totalBytes));
     // stream audio
