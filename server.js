@@ -113,6 +113,7 @@ function audioStream (ytid, encoding, start, end) {
   const filterFunction = (encoding === 'opus' ? opusFormat : aacFormat);
   const range = end ? `${start}-${end}` : `${start}-`;
   const url = `https://www.youtube.com/watch?v=${ytid}`;
+  console.log('$$$$' + range);
   return ytdl(url, {filter: filterFunction, range: range});
 }
 
